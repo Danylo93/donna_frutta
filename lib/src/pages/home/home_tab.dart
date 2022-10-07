@@ -1,8 +1,11 @@
+// ignore_for_file: library_prefixes
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:quitanda_app/src/config/custom_colors.dart';
 import 'package:quitanda_app/src/pages/home/components/category_tile.dart';
 import 'package:quitanda_app/src/models/app_data.dart' as appData;
+import 'package:quitanda_app/src/pages/home/components/item_tile.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -46,7 +49,9 @@ class _HomeTabState extends State<HomeTab> {
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 15),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                
+              },
               child: Badge(
                 badgeColor: CustomColors.customConstrastColor,
                 badgeContent: const Text(
@@ -127,8 +132,8 @@ class _HomeTabState extends State<HomeTab> {
             ),
             itemCount: appData.items.length,
             itemBuilder: (_, index) {
-              return Container(
-                color: Colors.red,
+              return ItemTile(
+                item: appData.items[index],
               );
             },
           ),
