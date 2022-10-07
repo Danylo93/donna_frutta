@@ -1,2 +1,2 @@
-# quitanda_app
+# Aplicativo de Quitanda Online
  
