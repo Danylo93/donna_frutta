@@ -1,4 +1,7 @@
+import 'package:quitanda_app/src/models/cart_item_model.dart';
 import 'package:quitanda_app/src/models/item_model.dart';
+import 'package:quitanda_app/src/models/order_model.dart';
+import 'package:quitanda_app/src/models/user_model.dart';
 
 ItemModel apple = ItemModel(
   description:
@@ -64,4 +67,94 @@ List<ItemModel> items = [
   papaya,
 ];
 
-List<String> categories = ['Maça', 'Pera', 'Uva', 'Mamão', 'Morango', 'Manga'];
+List<String> categories = [
+  'Frutas',
+  'Grãos',
+  'Cereais',
+  'Verduras',
+];
+
+List<CartItemModel> cartItems = [
+  CartItemModel(
+    item: apple,
+    quantity: 1,
+  ),
+  CartItemModel(
+    item: grape,
+    quantity: 2,
+  ),
+  CartItemModel(
+    item: grape,
+    quantity: 2,
+  ),
+  CartItemModel(
+    item: grape,
+    quantity: 2,
+  ),
+  CartItemModel(
+    item: grape,
+    quantity: 2,
+  ),
+];
+
+UserModel user = UserModel(
+  name: 'Danylo Alves de Oliveira',
+  email: 'danylo@gmail.com',
+  phone: '9 8362-6321',
+  cpf: '397.619.458-12',
+  password: '',
+);
+
+List<OrderModel> orders = [
+  // Pedido 01
+  OrderModel(
+    copyAndPaste: 'q1w2e3r4t5y6',
+    createdDateTime: DateTime.parse(
+      '2022-11-10 11:56:10.458',
+    ),
+    overdueDateTime: DateTime.parse(
+      '2022-11-10 11:57:10.458',
+    ),
+    id: 'asd6a54da6s2d1',
+    status: 'pending_payment',
+    total: 11.0,
+    items: [
+      CartItemModel(
+        item: apple,
+        quantity: 2,
+      ),
+      CartItemModel(
+        item: mango,
+        quantity: 2,
+      ),
+    ],
+  ),
+
+  // Pedido 02
+  OrderModel(
+    copyAndPaste: 'q1w2e3r4t5y6',
+    createdDateTime: DateTime.parse(
+      '2022-11-10 11:56:10.458',
+    ),
+    overdueDateTime: DateTime.parse(
+      '2022-11-10 11:57:10.458',
+    ),
+    id: 'a65s4d6a2s1d6a5s',
+    status: 'delivered',
+    total: 11.5,
+    items: [
+      CartItemModel(
+        item: guava,
+        quantity: 1,
+      ),
+      CartItemModel(
+        item: grape,
+        quantity: 1,
+      ),
+      CartItemModel(
+        item: mango,
+        quantity: 1,
+      ),
+    ],
+  ),
+];

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:quitanda_app/src/pages/cart/cart_tab.dart';
 import 'package:quitanda_app/src/pages/home/home_tab.dart';
+import 'package:quitanda_app/src/pages/orders/orders_tab.dart';
+import 'package:quitanda_app/src/pages/profile/profile_tab.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({Key? key}) : super(key: key);
@@ -18,17 +21,11 @@ class _BaseScreenState extends State<BaseScreen> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: [
-          const HomeTab(),
-          Container(
-            color: Colors.green,
-          ),
-          Container(
-            color: Colors.blue,
-          ),
-          Container(
-            color: Colors.yellow,
-          ),
+        children: const [
+          HomeTab(),
+          CardTab(),
+          OrdersTab(),
+          ProfileTab(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -37,6 +34,11 @@ class _BaseScreenState extends State<BaseScreen> {
             setState(() {
               currentIndex = index;
               pageController.jumpToPage(index);
+              pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 700),
+                curve: Curves.bounceInOut,
+              );
             });
           },
           type: BottomNavigationBarType.fixed,
