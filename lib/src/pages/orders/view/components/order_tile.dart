@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quitanda_app/src/models/cart_item_model.dart';
 import 'package:quitanda_app/src/models/order_model.dart';
 import 'package:quitanda_app/src/pages/common_widgets/payment_dialog.dart';
-import 'package:quitanda_app/src/pages/orders/components/order_status_widget.dart';
+import 'package:quitanda_app/src/pages/orders/view/components/order_status_widget.dart';
 import 'package:quitanda_app/src/services/utils_services.dart';
 
 class OrderTile extends StatelessWidget {
@@ -107,7 +107,9 @@ class OrderTile extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (_) {
-                        return PaymentDialog( order: order,);
+                        return PaymentDialog(
+                          order: order,
+                        );
                       },
                     );
                   },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quitanda_app/src/pages/cart/cart_tab.dart';
 import 'package:quitanda_app/src/pages/home/home_tab.dart';
-import 'package:quitanda_app/src/pages/orders/orders_tab.dart';
+import 'package:quitanda_app/src/pages/orders/view/orders_tab.dart';
 import 'package:quitanda_app/src/pages/profile/profile_tab.dart';
 
 class BaseScreen extends StatefulWidget {
