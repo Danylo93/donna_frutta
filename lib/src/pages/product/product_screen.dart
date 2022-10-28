@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda_app/src/config/custom_colors.dart';
 import 'package:quitanda_app/src/models/item_model.dart';
+import 'package:quitanda_app/src/pages/base/controller/navigation_controller.dart';
 import 'package:quitanda_app/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda_app/src/services/utils_services.dart';
 
@@ -17,6 +19,8 @@ class _ProductScreenState extends State<ProductScreen> {
   final UtilsServices utilsServices = UtilsServices();
 
   int cartItemQuantity = 1;
+
+  final navigationController = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.back();
+
+                              navigationController
+                                  .navigationPageView(NavigationTabs.cart);
+                            },
                             label: const Text(
                               'Adicionar ao Carrinho',
                               style: TextStyle(
