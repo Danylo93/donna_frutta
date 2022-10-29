@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:quitanda_app/src/config/custom_colors.dart';
 import 'package:quitanda_app/src/models/item_model.dart';
 import 'package:quitanda_app/src/pages/base/controller/navigation_controller.dart';
+import 'package:quitanda_app/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda_app/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda_app/src/services/utils_services.dart';
 
@@ -19,6 +20,8 @@ class _ProductScreenState extends State<ProductScreen> {
   final UtilsServices utilsServices = UtilsServices();
 
   int cartItemQuantity = 1;
+
+  final cartController = Get.find<CartController>();
 
   final navigationController = Get.find<NavigationController>();
 
@@ -110,6 +113,10 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
                             onPressed: () {
                               Get.back();
+
+                              cartController.addItemToCart(
+                                  item: widget.item,
+                                  quantity: cartItemQuantity);
 
                               navigationController
                                   .navigationPageView(NavigationTabs.cart);
