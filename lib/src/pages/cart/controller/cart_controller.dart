@@ -1,10 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_app/src/models/cart_item_model.dart';
 import 'package:quitanda_app/src/models/item_model.dart';
+import 'package:quitanda_app/src/models/order_model.dart';
 import 'package:quitanda_app/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda_app/src/pages/cart/cart_result/cart_result.dart';
 import 'package:quitanda_app/src/pages/cart/repository/cart_repository.dart';
+import 'package:quitanda_app/src/pages/common_widgets/payment_dialog.dart';
 import 'package:quitanda_app/src/services/utils_services.dart';
+
 
 class CartController extends GetxController {
   final cartRepository = CartRepository();
@@ -35,6 +39,38 @@ class CartController extends GetxController {
   void setCheckoutLoading(bool value) {
     isCheckoutLoading = value;
     update();
+  }
+
+  Future checkoutCart() async {
+    setCheckoutLoading(true);
+
+    CartResult<OrderModel> result = await cartRepository.checkoutCart(
+      token: authController.user.token!,
+      total: cartTotalPrice(),
+    );
+
+    setCheckoutLoading(false);
+
+    result.when(
+      success: (order) {
+        cartItems.clear();
+        update();
+
+        showDialog(
+          context: Get.context!,
+          builder: (_) {
+            return PaymentDialog(
+              order: order,
+            );
+          },
+        );
+      },
+      error: (message) {
+        utilsServices.showToast(
+          message: message,
+        );
+      },
+    );
   }
 
   Future<bool> changeItemQuantity({

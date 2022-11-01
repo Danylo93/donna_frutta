@@ -21,8 +21,10 @@ class HttpManager {
       ..addAll({
         'content-type': 'application/json',
         'accept': 'application/json',
-        'X-Parse-Application-Id': 'iHSphVTpawXzpa2QmqAMz2gofddiXdhJb6WtxImu',
-        'X-Parse-REST-API-Key': 'AYaeHzGIm7ygRsMt8a3ZZTPwtyyZoDVfknnT29l2',
+        'X-Parse-Application-Id': 'g1Oui3JqxnY4S1ykpQWHwEKGOe0dRYCPvPF4iykc',
+        'X-Parse-REST-API-Key': 'rFBKU8tk0m5ZlKES2CGieOaoYz6TgKxVMv8jRIsN',
+        // 'X-Parse-Application-Id': 'iHSphVTpawXzpa2QmqAMz2gofddiXdhJb6WtxImu',
+        // 'X-Parse-REST-API-Key': 'AYaeHzGIm7ygRsMt8a3ZZTPwtyyZoDVfknnT29l2',
       });
 
     Dio dio = Dio();

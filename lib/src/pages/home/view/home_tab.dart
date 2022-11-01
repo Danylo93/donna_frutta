@@ -1,19 +1,17 @@
-// ignore_for_file: library_prefixes
-
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_app/src/config/custom_colors.dart';
+import 'package:quitanda_app/src/pages/base/controller/navigation_controller.dart';
+import 'package:quitanda_app/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda_app/src/pages/common_widgets/app_name_widget.dart';
 import 'package:quitanda_app/src/pages/common_widgets/custom_shimmer.dart';
 import 'package:quitanda_app/src/pages/home/controller/home_controller.dart';
 import 'package:quitanda_app/src/pages/home/view/components/category_tile.dart';
-import 'package:quitanda_app/src/config/app_data.dart' as appData;
 import 'package:quitanda_app/src/pages/home/view/components/item_tile.dart';
-import 'package:quitanda_app/src/services/utils_services.dart';
+
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -26,6 +24,7 @@ class _HomeTabState extends State<HomeTab> {
   GlobalKey<CartIconKey> globalKeyCartItems = GlobalKey<CartIconKey>();
 
   final searchController = TextEditingController();
+  final navigationController = Get.find<NavigationController>();
 
   late Function(GlobalKey) runAddToCardAnimation;
 
@@ -36,7 +35,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appbar
+      // App bar
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -44,25 +43,37 @@ class _HomeTabState extends State<HomeTab> {
         title: const AppNameWidget(),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(top: 15, right: 15),
-            child: GestureDetector(
-              onTap: () {},
-              child: Badge(
-                badgeColor: CustomColors.customConstrastColor,
-                badgeContent: const Text(
-                  '2',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                child: AddToCartIcon(
-                  key: globalKeyCartItems,
-                  icon: Icon(
-                    Icons.shopping_cart,
-                    color: CustomColors.customSwatchColor,
-                  ),
-                ),
-              ),
+            padding: const EdgeInsets.only(
+              top: 15,
+              right: 15,
             ),
-          )
+            child: GetBuilder<CartController>(
+              builder: (controller) {
+                return GestureDetector(
+                  onTap: () {
+                    navigationController.navigatePageView(NavigationTabs.cart);
+                  },
+                  child: Badge(
+                    badgeColor: CustomColors.customConstrastColor,
+                    badgeContent: Text(
+                      controller.cartItems.length.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    child: AddToCartIcon(
+                      key: globalKeyCartItems,
+                      icon: Icon(
+                        Icons.shopping_cart,
+                        color: CustomColors.customSwatchColor,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
 
@@ -70,11 +81,12 @@ class _HomeTabState extends State<HomeTab> {
         gkCart: globalKeyCartItems,
         previewDuration: const Duration(milliseconds: 100),
         previewCurve: Curves.ease,
-        receiveCreateAddToCardAnimationMethod: (addToCartAnimationMethod) {
-          runAddToCardAnimation = addToCartAnimationMethod;
+        receiveCreateAddToCardAnimationMethod: (addToCardAnimationMethod) {
+          runAddToCardAnimation = addToCardAnimationMethod;
         },
         child: Column(
           children: [
+            // Campo de pesquisa
             GetBuilder<HomeController>(
               builder: (controller) {
                 return Padding(
@@ -112,7 +124,8 @@ class _HomeTabState extends State<HomeTab> {
                                 Icons.close,
                                 color: CustomColors.customConstrastColor,
                                 size: 21,
-                              ))
+                              ),
+                            )
                           : null,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(60),
@@ -127,7 +140,7 @@ class _HomeTabState extends State<HomeTab> {
               },
             ),
 
-            //Categorias
+            // Categorias
             GetBuilder<HomeController>(
               builder: (controller) {
                 return Container(
@@ -164,71 +177,75 @@ class _HomeTabState extends State<HomeTab> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
-                          )),
+                          ),
+                        ),
                 );
               },
             ),
 
-            //Grid
-            GetBuilder<HomeController>(builder: (controller) {
-              return Expanded(
-                child: !controller.isProductLoading
-                    ? Visibility(
-                        visible: (controller.currentyCategory?.items ?? [])
-                            .isNotEmpty,
-
-                        replacement: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                          Icon(Icons.search_off,
-                          size: 40,
-                          color: CustomColors.customSwatchColor,
+            // Grid
+            GetBuilder<HomeController>(
+              builder: (controller) {
+                return Expanded(
+                  child: !controller.isProductLoading
+                      ? Visibility(
+                          visible: (controller.currentyCategory?.items ?? [])
+                              .isNotEmpty,
+                          replacement: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 40,
+                                color: CustomColors.customSwatchColor,
+                              ),
+                              const Text('Não há itens para apresentar'),
+                            ],
                           ),
-                          const Text('Não Há itens para apresentar'),
-                        ]) ,
-                        
-                        child: GridView.builder(
+                          child: GridView.builder(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                            physics: const BouncingScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 9 / 11.5,
+                            ),
+                            itemCount: controller.allProducts.length,
+                            itemBuilder: (_, index) {
+                              if (((index + 1) ==
+                                      controller.allProducts.length) &&
+                                  !controller.isLastPage) {
+                                controller.loadMoreProducts();
+                              }
+
+                              return ItemTile(
+                                  item: controller.allProducts[index],
+                                  cartAnimationMethod:
+                                      itemSelectedCartAnimations);
+                            },
+                          ),
+                        )
+                      : GridView.count(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                           physics: const BouncingScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 9 / 11.5,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 9 / 11.5,
+                          children: List.generate(
+                            10,
+                            (index) => CustomShimmer(
+                              height: double.infinity,
+                              width: double.infinity,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
-                          itemCount: controller.allProducts.length,
-                          itemBuilder: (_, index) {
-                            if (((index + 1) ==
-                                    controller.allProducts.length) &&
-                                !controller.isLastPage) {
-                              controller.loadMoreProducts();
-                            }
-
-                            return ItemTile(
-                                item: controller.allProducts[index],
-                                cartAnimationMethod:
-                                    itemSelectedCartAnimations);
-                          },
                         ),
-                      )
-                    : GridView.count(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        physics: const BouncingScrollPhysics(),
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 9 / 11.5,
-                        children: List.generate(
-                          10,
-                          (index) => CustomShimmer(
-                            height: double.infinity,
-                            width: double.infinity,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        )),
-              );
-            })
+                );
+              },
+            ),
           ],
         ),
       ),
