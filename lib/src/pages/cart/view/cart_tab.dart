@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_app/src/config/custom_colors.dart';
+import 'package:quitanda_app/src/constants/storage_keys.dart';
+import 'package:quitanda_app/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda_app/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda_app/src/pages/cart/view/components/cart_tile.dart';
 import 'package:quitanda_app/src/services/utils_services.dart';
+import 'package:dio/dio.dart';
 
 
 class CartTab extends StatefulWidget {
@@ -16,6 +19,30 @@ class CartTab extends StatefulWidget {
 class _CartTabState extends State<CartTab> {
   final UtilsServices utilsServices = UtilsServices();
   final cartController = Get.find<CartController>();
+   final authController = Get.find<AuthController>();
+
+  Future <void> checkout()  async {
+ try{
+  final response = await  Dio().post('https://parseapi.back4app.com/parse/functions/checkout', 
+    options: 
+    Options(
+      headers: {
+        'X-Parse-Application-Id': 'iHSphVTpawXzpa2QmqAMz2gofddiXdhJb6WtxImu',
+        'X-Parse-REST-API-Key': 'AYaeHzGIm7ygRsMt8a3ZZTPwtyyZoDVfknnT29l2',
+        'X-Parse-Session-Token': authController.user.token!,
+        'Content-Type': 'application/json'
+    },
+    
+    ),
+    data: {
+      'total' : cartController.cartTotalPrice()
+    }
+    );
+    print(response.data);
+ } on DioError catch(e){
+  print(e.response);
+ }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +197,7 @@ class _CartTabState extends State<CartTab> {
                 ),
               ),
               onPressed: () {
+                checkout();
                 Navigator.of(context).pop(true);
               },
               child: const Text('Sim'),
